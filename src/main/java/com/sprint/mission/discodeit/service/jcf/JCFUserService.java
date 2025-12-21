@@ -4,7 +4,7 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 
 import java.util.*;
-
+/*
 public class JCFUserService implements UserService {
     private final Map<UUID, User> data;
 
@@ -51,3 +51,4 @@ public class JCFUserService implements UserService {
         this.data.remove(userId);
     }
 }
+*/

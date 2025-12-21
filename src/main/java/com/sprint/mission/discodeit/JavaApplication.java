@@ -16,7 +16,7 @@ import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.basic.BasicChannelService;
 import com.sprint.mission.discodeit.service.basic.BasicMessageService;
 import com.sprint.mission.discodeit.service.basic.BasicUserService;
-
+/* 주석처리해둠
 public class JavaApplication {
     static User setupUser(UserService userService) {
         User user = userService.create("woody", "woody@codeit.com", "woody1234");
@@ -51,3 +51,4 @@ public class JavaApplication {
         messageCreateTest(messageService, channel, user);
     }
 }
+ */

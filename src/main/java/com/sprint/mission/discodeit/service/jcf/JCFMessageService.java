@@ -6,7 +6,7 @@ import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
 
 import java.util.*;
-
+/*
 public class JCFMessageService implements MessageService {
     private final Map<UUID, Message> data;
     //
@@ -65,3 +65,4 @@ public class JCFMessageService implements MessageService {
         this.data.remove(messageId);
     }
 }
+*/

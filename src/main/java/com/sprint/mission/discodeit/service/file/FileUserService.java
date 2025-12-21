@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+/*
 public class FileUserService implements UserService {
     private final Path DIRECTORY;
     private final String EXTENSION = ".ser";
@@ -131,3 +132,6 @@ public class FileUserService implements UserService {
         }
     }
 }
+
+
+ */

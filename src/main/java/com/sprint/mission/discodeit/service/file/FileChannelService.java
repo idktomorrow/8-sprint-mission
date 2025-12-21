@@ -1,5 +1,9 @@
 package com.sprint.mission.discodeit.service.file;
 
+import com.sprint.mission.discodeit.dto.channel.ChannelDto;
+import com.sprint.mission.discodeit.dto.channel.ChannelUpdateRequest;
+import com.sprint.mission.discodeit.dto.channel.PrivateChannelCreateRequest;
+import com.sprint.mission.discodeit.dto.channel.PublicChannelCreateRequest;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.service.ChannelService;
@@ -12,118 +16,90 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
-
+import java.util.stream.Stream;
+/*
 public class FileChannelService implements ChannelService {
+    private static final String EXTENSION = ".ser";
     private final Path DIRECTORY;
-    private final String EXTENSION = ".ser";
 
     public FileChannelService() {
-        this.DIRECTORY = Paths.get(System.getProperty("user.dir"), "file-data-map", Channel.class.getSimpleName());
-        if (Files.notExists(DIRECTORY)) {
-            try {
-                Files.createDirectories(DIRECTORY);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    private Path resolvePath(UUID id) {
-        return DIRECTORY.resolve(id + EXTENSION);
-    }
-
-    @Override
-    public Channel create(ChannelType type, String name, String description) {
-        Channel channel = new Channel(type, name, description);
-        Path path = resolvePath(channel.getId());
-        try (
-                FileOutputStream fos = new FileOutputStream(path.toFile());
-                ObjectOutputStream oos = new ObjectOutputStream(fos)
-        ) {
-            oos.writeObject(channel);
+        this.DIRECTORY = Paths.get(
+                System.getProperty("user.dir"),
+                "file-data-map",
+                Channel.class.getSimpleName()
+        );
+        try {
+            Files.createDirectories(DIRECTORY);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        return channel;
+    private Path resolve(UUID id) {
+        return DIRECTORY.resolve(id + EXTENSION);
+    }
+
+     ================= create =================
+
+    @Override
+    public ChannelDto createPublic(PublicChannelCreateRequest request) {
+        Channel channel = new Channel(
+                ChannelType.PUBLIC,
+                request.name(),
+                request.description()
+        );
+        save(channel);
+        return toDto(channel);
     }
 
     @Override
-    public Channel find(UUID channelId) {
-        Channel channelNullable = null;
-        Path path = resolvePath(channelId);
-        if (Files.exists(path)) {
-            try (
-                    FileInputStream fis = new FileInputStream(path.toFile());
-                    ObjectInputStream ois = new ObjectInputStream(fis)
-            ) {
-                channelNullable = (Channel) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    public ChannelDto createPrivate(PrivateChannelCreateRequest request) {
+        Channel channel = new Channel(
+                ChannelType.PRIVATE,
+                request.name(),
+                request.description()
+        );
+        save(channel);
+        return toDto(channel);
+    }
 
-        return Optional.ofNullable(channelNullable)
-                .orElseThrow(() -> new NoSuchElementException("Channel with id " + channelId + " not found"));
+     ================= find =================
+
+    @Override
+    public ChannelDto find(UUID channelId) {
+        return toDto(load(channelId));
     }
 
     @Override
-    public List<Channel> findAll() {
-        try {
-            return Files.list(DIRECTORY)
-                    .filter(path -> path.toString().endsWith(EXTENSION))
-                    .map(path -> {
-                        try (
-                                FileInputStream fis = new FileInputStream(path.toFile());
-                                ObjectInputStream ois = new ObjectInputStream(fis)
-                        ) {
-                            return (Channel) ois.readObject();
-                        } catch (IOException | ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                    })
+    public List<ChannelDto> findAllByUserId(UUID userId) {
+        try (Stream<Path> paths = Files.list(DIRECTORY)) {
+            return paths
+                    .filter(p -> p.toString().endsWith(EXTENSION))
+                    .map(this::read)
+                    .map(this::toDto)
                     .toList();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+     ================= update =================
+
     @Override
-    public Channel update(UUID channelId, String newName, String newDescription) {
-        Channel channelNullable = null;
-        Path path = resolvePath(channelId);
-        if (Files.exists(path)) {
-            try (
-                    FileInputStream fis = new FileInputStream(path.toFile());
-                    ObjectInputStream ois = new ObjectInputStream(fis)
-            ) {
-                channelNullable = (Channel) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        Channel channel = Optional.ofNullable(channelNullable)
-                .orElseThrow(() -> new NoSuchElementException("Channel with id " + channelId + " not found"));
-        channel.update(newName, newDescription);
-
-        try(
-                FileOutputStream fos = new FileOutputStream(path.toFile());
-                ObjectOutputStream oos = new ObjectOutputStream(fos)
-        ) {
-            oos.writeObject(channel);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return channel;
+    public ChannelDto update(ChannelUpdateRequest request) {
+        Channel channel = load(request.channelId());
+        channel.update(request.name(), request.description());
+        save(channel);
+        return toDto(channel);
     }
+
+     ================= delete =================
 
     @Override
     public void delete(UUID channelId) {
-        Path path = resolvePath(channelId);
+        Path path = resolve(channelId);
         if (Files.notExists(path)) {
-            throw new NoSuchElementException("Channel with id " + channelId + " not found");
+            throw new NoSuchElementException("Channel not found: " + channelId);
         }
         try {
             Files.delete(path);
@@ -131,4 +107,55 @@ public class FileChannelService implements ChannelService {
             throw new RuntimeException(e);
         }
     }
+
+     ================= file helpers =================
+
+    private void save(Channel channel) {
+        try (
+                FileOutputStream fos = new FileOutputStream(resolve(channel.getId()).toFile());
+                ObjectOutputStream oos = new ObjectOutputStream(fos)
+        ) {
+            oos.writeObject(channel);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Channel load(UUID id) {
+        Path path = resolve(id);
+        if (Files.notExists(path)) {
+            throw new NoSuchElementException("Channel not found: " + id);
+        }
+        return read(path);
+    }
+
+    private Channel read(Path path) {
+        try (
+                FileInputStream fis = new FileInputStream(path.toFile());
+                ObjectInputStream ois = new ObjectInputStream(fis)
+        ) {
+            return (Channel) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+     ================= mapper =================
+
+    private ChannelDto toDto(Channel channel) {
+        return new ChannelDto(
+                channel.getId(),
+                channel.getName(),
+                channel.getDescription(),
+                channel.getType(),
+                channel.getCreatedAt(),
+                channel.getUpdatedAt()
+        );
+    }
 }
+
+
+
+
+
+*/
