@@ -1,21 +1,21 @@
 package com.sprint.mission.discodeit.service;
 
-import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.dto.message.MessageCreateRequest;
+import com.sprint.mission.discodeit.dto.message.MessageDto;
+import com.sprint.mission.discodeit.dto.message.MessageUpdateRequest;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface MessageService {
 
-/*  필수요수
-        1. Create
-        2. Read(find, findAllMessages)
-        3. Update
-        4. Delete
-*/
-    Message createMessage(Message message);
-    Message findMessage(UUID id);
-    List<Message> findAllMessages();
-    Message updateMessage(UUID id, String newMessage);
-    boolean deleteMessage(UUID id);
+    MessageDto create(MessageCreateRequest request);
+
+    MessageDto find(UUID messageId);
+
+    List<MessageDto> findAll();
+
+    MessageDto update(UUID messageId, MessageUpdateRequest request);
+
+    void delete(UUID messageId);
 }

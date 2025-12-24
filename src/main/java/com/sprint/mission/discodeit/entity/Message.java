@@ -1,61 +1,45 @@
 package com.sprint.mission.discodeit.entity;
 
+import lombok.Getter;
+
 import java.io.Serializable;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class Message  implements Serializable {
+@Getter
+public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
-     /*
-        필수 요소
-        1. id
-        2. 생성 시간
-        3. 업데이트 시간
-        4. 메세지
-        5. 보낸사람
-        6. 보낸채널
-    */
 
-    //필드 선언
     private UUID id;
-    private long createdAt;
-    private long updatedAt;
-    private String message;
-    private User sender;
-    private Channel channel;
+    private Instant createdAt;
+    private Instant updatedAt;
+    //
+    private String content;
+    private UUID channelId;
+    private UUID authorId;
 
-    //생성자
-    public Message(Channel channel, User sender, String message) {
+    private List<UUID> attachmentIds = new ArrayList<>();
+
+    public Message(String content, UUID channelId, UUID authorId) {
         this.id = UUID.randomUUID();
-        this.createdAt = System.currentTimeMillis();
-        this.updatedAt = System.currentTimeMillis();
-        this.channel = channel;
-        this.sender = sender;
-        this.message = message;
+        this.createdAt = Instant.now();
+        //
+        this.content = content;
+        this.channelId = channelId;
+        this.authorId = authorId;
     }
 
-    //getter
-    public UUID getId() {
-        return id;
-    }
-    public long getCreatedAt() {
-        return createdAt;
-    }
-    public long getUpdatedAt() {
-        return updatedAt;
-    }
-    public Channel getChannel() {
-        return channel;
-    }
-    public User getSender() {
-        return sender;
-    }
-    public String getMessage() {
-        return message;
-    }
+    public void update(String newContent) {
+        boolean anyValueUpdated = false;
+        if (newContent != null && !newContent.equals(this.content)) {
+            this.content = newContent;
+            anyValueUpdated = true;
+        }
 
-    //update
-    public void updateMessage(String newMessage) {
-        this.message = newMessage;
-        this.updatedAt = System.currentTimeMillis();
+        if (anyValueUpdated) {
+            this.updatedAt = Instant.now();
+        }
     }
 }

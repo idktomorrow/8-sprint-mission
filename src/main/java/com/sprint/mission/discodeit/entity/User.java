@@ -1,57 +1,56 @@
 package com.sprint.mission.discodeit.entity;
 
+import lombok.Getter;
+
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.UUID;
 
+@Getter
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-    /*
-        필수 요소
-        1. id
-        2. 생성 시간
-        3. 업데이트 시간
-        4. 유저ID
-        5. 유저Email
-    */
 
-    //필드 선언
     private UUID id;
-    private long createdAt;
-    private long updatedAt;
-    private String userId;
-    private String userEmail;
+    private UUID profileImageId;
+    private Instant createdAt;
+    private Instant updatedAt;
 
-    //생성자
-    public User(String userId,String userEmail) {
-        this.id = UUID.randomUUID(); //UUID를 사용해 고유id
-        this.createdAt = System.currentTimeMillis(); //system.currentTimeMillis는 java 제공 메서드
-        this.updatedAt = System.currentTimeMillis();
+    private String username;
+    private String email;
+    private String password;
 
-        this.userId = userId;
-        this.userEmail = userEmail;
-    }
 
-    //getter 함수 정의
-    public UUID getId() {
-        return id;
-    }
-    public String getUserId() {
-        return userId;
-    }
-    public String getUserEmail() {
-        return userEmail;
-    }
-    public long getCreatedAt() {
-        return createdAt;
-    }
-    public long getUpdatedAt() {
-        return updatedAt;
+    public User(String username, String email, String password, UUID profileImageId) {
+        this.id = UUID.randomUUID();
+        this.createdAt = Instant.now();
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.profileImageId = profileImageId;
     }
 
-    //update 함수 정의
-    public void update(String newUserId, String newUserEmail) {
-        this.userId = newUserId;
-        this.userEmail = newUserEmail;
-        this.updatedAt = System.currentTimeMillis();
+    public void update(String newUsername, String newEmail, String newPassword, UUID newProfileImageId) {
+        boolean anyValueUpdated = false;
+        if (newUsername != null && !newUsername.equals(this.username)) {
+            this.username = newUsername;
+            anyValueUpdated = true;
+        }
+        if (newEmail != null && !newEmail.equals(this.email)) {
+            this.email = newEmail;
+            anyValueUpdated = true;
+        }
+        if (newPassword != null && !newPassword.equals(this.password)) {
+            this.password = newPassword;
+            anyValueUpdated = true;
+        }
+
+        if (newProfileImageId != null && !newProfileImageId.equals(this.profileImageId)) {
+            this.profileImageId = newProfileImageId;
+            anyValueUpdated = true;
+        }
+
+        if (anyValueUpdated) {
+            this.updatedAt = Instant.now();
+        }
     }
 }
