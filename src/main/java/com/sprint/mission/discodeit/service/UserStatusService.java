@@ -1,17 +1,17 @@
 package com.sprint.mission.discodeit.service;
 
+import com.sprint.mission.discodeit.dto.request.UserStatusCreateRequest;
+import com.sprint.mission.discodeit.dto.request.UserStatusUpdateRequest;
 import com.sprint.mission.discodeit.entity.UserStatus;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UserStatusService {
-
-    //로그인, 활동 시 호출
-    void touch(UUID userId);
-
-    //현재 온라인 여부 확인
-    boolean isOnline(UUID userId);
-
-    //상태 조회
-    UserStatus find(UUID userId);
+    UserStatus create(UserStatusCreateRequest request);
+    UserStatus find(UUID userStatusId);
+    List<UserStatus> findAll();
+    UserStatus update(UUID userStatusId, UserStatusUpdateRequest request);
+    UserStatus updateByUserId(UUID userId, UserStatusUpdateRequest request);
+    void delete(UUID userStatusId);
 }
