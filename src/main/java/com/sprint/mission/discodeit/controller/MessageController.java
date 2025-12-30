@@ -1,13 +1,14 @@
 package com.sprint.mission.discodeit.controller;
 
 
-import com.sprint.mission.discodeit.dto.request.BinaryContentCreateRequest;
 import com.sprint.mission.discodeit.dto.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.request.MessageUpdateRequest;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +21,7 @@ public class MessageController {
     private final MessageService messageService;
 
     // 생성
-    @GetMapping("/create")
+    @RequestMapping("/create")
     public Message create(@RequestParam UUID channelId,
                           @RequestParam UUID authorId,
                           @RequestParam String content) {
@@ -31,26 +32,26 @@ public class MessageController {
     }
 
     // 조회
-    @GetMapping("/find")
+    @RequestMapping("/find")
     public Message find(@RequestParam UUID messageId) {
         return messageService.find(messageId);
     }
 
     // 전체 조회 (채널 기준)
-    @GetMapping("/findAll")
+    @RequestMapping("/findAll")
     public List<Message> findAll(@RequestParam UUID channelId) {
         return messageService.findAllByChannelId(channelId);
     }
 
     // 수정
-    @GetMapping("/update")
+    @RequestMapping("/update")
     public Message update(@RequestParam UUID messageId,
                           @RequestParam String newContent) {
         return messageService.update(messageId, new MessageUpdateRequest(newContent));
     }
 
     // 삭제
-    @GetMapping("/delete")
+    @RequestMapping("/delete")
     public String delete(@RequestParam UUID messageId) {
         messageService.delete(messageId);
         return "Message deleted";

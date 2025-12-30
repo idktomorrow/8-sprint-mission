@@ -19,32 +19,32 @@ public class ChannelController {
     private final ChannelService channelService;
 
     // 공개 채널 생성
-    @GetMapping("/create/public")
+    @RequestMapping("/create/public")
     public Channel createPublic(@RequestParam String name,
                                 @RequestParam String description) {
         return channelService.create(new PublicChannelCreateRequest(name, description));
     }
 
     // 비공개 채널 생성
-    @GetMapping("/create/private")
+    @RequestMapping("/create/private")
     public Channel createPrivate(@RequestParam List<UUID> participantIds) {
         return channelService.create(new PrivateChannelCreateRequest(participantIds));
     }
 
     // 조회
-    @GetMapping("/find")
+    @RequestMapping("/find")
     public ChannelDto find(@RequestParam UUID channelId) {
         return channelService.find(channelId);
     }
 
     // 전체 조회 (사용자 기준)
-    @GetMapping("/findAll")
+    @RequestMapping("/findAll")
     public List<ChannelDto> findAllByUserId(@RequestParam UUID userId) {
         return channelService.findAllByUserId(userId);
     }
 
     // 수정 (공개 채널만)
-    @GetMapping("/update")
+    @RequestMapping("/update")
     public Channel update(@RequestParam UUID channelId,
                           @RequestParam String newName,
                           @RequestParam String newDescription) {
@@ -52,7 +52,7 @@ public class ChannelController {
     }
 
     // 삭제
-    @GetMapping("/delete")
+    @RequestMapping("/delete")
     public String delete(@RequestParam UUID channelId) {
         channelService.delete(channelId);
         return "Channel deleted";

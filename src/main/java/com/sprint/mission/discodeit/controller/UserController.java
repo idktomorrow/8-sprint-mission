@@ -30,7 +30,7 @@ public class UserController {
     private final UserStatusService userStatusService;
 
     // 생성
-    @GetMapping("/create")
+    @RequestMapping("/create")
     public User create(@RequestParam String username,
                        @RequestParam String email,
                        @RequestParam String password) {
@@ -39,19 +39,19 @@ public class UserController {
     }
 
     // 조회
-    @GetMapping("/find")
+    @RequestMapping("/find")
     public UserDto find(@RequestParam UUID userId) {
         return userService.find(userId);
     }
 
     // 전체 조회
-    @GetMapping("/findAll")
+    @RequestMapping("/findAll")
     public java.util.List<UserDto> findAll() {
         return userService.findAll();
     }
 
     // 수정
-    @GetMapping("/update")
+    @RequestMapping("/update")
     public User update(@RequestParam UUID userId,
                        @RequestParam String newUsername,
                        @RequestParam String newEmail,
@@ -61,20 +61,20 @@ public class UserController {
     }
 
     // 삭제
-    @GetMapping("/delete")
+    @RequestMapping("/delete")
     public String delete(@RequestParam UUID userId) {
         userService.delete(userId);
         return "User deleted";
     }
 
     // 로그인
-    @GetMapping("/login")
+    @RequestMapping("/login")
     public User login(@RequestParam String username,
                       @RequestParam String password) {
         return authService.login(new LoginRequest(username, password));
     }
 
-    @GetMapping("/update-status")
+    @RequestMapping("/update-status")
     public String updateStatus(@RequestParam UUID userId) {
         userStatusService.updateByUserId(userId,
                 new UserStatusUpdateRequest(Instant.now()));

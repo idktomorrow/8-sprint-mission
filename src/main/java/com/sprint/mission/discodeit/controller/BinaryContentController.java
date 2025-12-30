@@ -16,13 +16,13 @@ public class BinaryContentController {
     private final BinaryContentService binaryContentService;
 
     //단건 조회
-    @GetMapping("/find")
+    @RequestMapping("/find")
     public BinaryContent find(@RequestParam UUID id) {
         return binaryContentService.find(id);
     }
 
     //전체 조회
-    @GetMapping("/findAll")
+    @RequestMapping("/findAll")
     public List<BinaryContent> findAll(@RequestParam List<UUID> ids) {
         return binaryContentService.findAllByIdIn(ids);
     }

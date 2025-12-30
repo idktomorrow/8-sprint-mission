@@ -20,19 +20,19 @@ public class ReadStatusController {
     private final ReadStatusService readStatusService;
 
     //생성
-    @GetMapping("/create")
+    @RequestMapping("/create")
     public ReadStatus create(@RequestParam UUID userId,
                              @RequestParam UUID channelId) {
         return readStatusService.create(new ReadStatusCreateRequest(userId, channelId, Instant.now()));
     }
 
     //전체 조회
-    @GetMapping("/findAll")
+    @RequestMapping("/findAll")
     public List<ReadStatus> findAllByUserId(@RequestParam UUID userId) {
         return readStatusService.findAllByUserId(userId);
     }
 
-    @GetMapping("/update")
+    @RequestMapping("/update")
     public ReadStatus update(@RequestParam UUID readStatusId) {
         return readStatusService.update(readStatusId, new ReadStatusUpdateRequest(Instant.now()));
     }
