@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "22a952a1-947d-42f4-b977-3423318cf45a",
+		"name": "sprint-mission-4",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50902018",
+		"_collection_link": "https://swj9675-6589738.postman.co/workspace/woong's-Workspace~727d1914-e63e-4133-8ccc-33fccdd8dbf4/collection/50902018-22a952a1-947d-42f4-b977-3423318cf45a?action=share&source=collection_link&creator=50902018"
+	},
+	"item": [
+		{
+			"name": "사용자 생성",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "사용자 수정",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "사용자 조회",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "사용자 전체 조회",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "사용자 접속여부",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "사용자 삭제",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "사용자 로그인",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "공개 채널 생성",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "비공개 채널 생성",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "공개 채널 수정",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "채널 조회",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "전체 채널 조회(사용자 기준)",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "채널 삭제",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "메세지 작성",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "메세지 수정",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "메세지 조회",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "메세지 전체 조회",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "메세지 삭제",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "수신 정보 생성",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "수신 정보 수정",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "수신 정보 조회(사용자 기준)",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "단일 파일 조회",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "전체 파일 조회",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/binary-content/findAll?binaryContentIds=<UUID1>&binaryContentIds=<UUID2>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"binary-content",
+						"findAll"
+					],
+					"query": [
+						{
+							"key": "binaryContentIds",
+							"value": "<UUID1>"
+						},
+						{
+							"key": "binaryContentIds",
+							"value": "<UUID2>"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
