@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,7 +66,7 @@ public class MessageController {
   }
 
   //메세지 수정
-  @PutMapping("/{messageId}")
+  @PatchMapping("/{messageId}")
   public ResponseEntity<Message> update(
       @PathVariable UUID messageId,
       @RequestBody MessageUpdateRequest request) {
