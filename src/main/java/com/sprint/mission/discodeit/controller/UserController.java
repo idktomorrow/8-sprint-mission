@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.controller.api.UserApi;
 import com.sprint.mission.discodeit.dto.data.UserDto;
 import com.sprint.mission.discodeit.dto.request.BinaryContentCreateRequest;
 import com.sprint.mission.discodeit.dto.request.UserCreateRequest;
@@ -31,7 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class UserController implements UserApi {
 
   private final UserService userService;
   private final UserStatusService userStatusService;
@@ -41,6 +42,7 @@ public class UserController {
   @PostMapping(
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
+  @Override
   public ResponseEntity<User> create(
       @RequestPart("userCreateRequest") UserCreateRequest userCreateRequest,
       @RequestPart(value = "profile", required = false) MultipartFile profile
@@ -55,11 +57,12 @@ public class UserController {
 
   //사용자 수정
   @PatchMapping(
-      value = "/{userId}",
+      path = "/{userId}",
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
+  @Override
   public ResponseEntity<User> update(
-      @PathVariable UUID userId,
+      @PathVariable("userId") UUID userId,
       @RequestPart("userUpdateRequest") UserUpdateRequest userUpdateRequest,
       @RequestPart(value = "profile", required = false) MultipartFile profile
   ) {
@@ -72,9 +75,10 @@ public class UserController {
   }
 
   //사용자 삭제
-  @DeleteMapping("/{userId}")
+  @DeleteMapping(path = "/{userId}")
+  @Override
   public ResponseEntity<Void> delete(
-      @PathVariable UUID userId) {
+      @PathVariable("userId") UUID userId) {
     userService.delete(userId);
     return ResponseEntity
         .status(HttpStatus.NO_CONTENT)
@@ -83,6 +87,7 @@ public class UserController {
 
   //사용자 전체 조회
   @GetMapping
+  @Override
   public ResponseEntity<List<UserDto>> findAll() {
     List<UserDto> users = userService.findAll();
     return ResponseEntity
@@ -91,9 +96,10 @@ public class UserController {
   }
 
   //사용자 상태 업데이트
-  @PatchMapping("/{userId}/status")
+  @PatchMapping(path = "/{userId}/userStatus")
+  @Override
   public ResponseEntity<UserStatus> updateUserStatusByUserId(
-      @PathVariable UUID userId,
+      @PathVariable("userId") UUID userId,
       @RequestBody UserStatusUpdateRequest request) {
     UserStatus updatedUserStatus = userStatusService.updateByUserId(userId, request);
     return ResponseEntity

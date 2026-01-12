@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.controller;
 
-
+import com.sprint.mission.discodeit.controller.api.BinaryContentApi;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import java.util.List;
@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/binaryContents")
-public class BinaryContentController {
+public class BinaryContentController implements BinaryContentApi {
 
   private final BinaryContentService binaryContentService;
 
   //단건 조회
-  @GetMapping("/{binaryContentId}")
-  public ResponseEntity<BinaryContent> find(
-      @PathVariable UUID binaryContentId) {
+  @GetMapping(path = "{binaryContentId}")
+  public ResponseEntity<BinaryContent> find(@PathVariable("binaryContentId") UUID binaryContentId) {
     BinaryContent binaryContent = binaryContentService.find(binaryContentId);
     return ResponseEntity
         .status(HttpStatus.OK)
@@ -34,7 +33,7 @@ public class BinaryContentController {
   //ID로 검색 /api/binaryContents?ids=1,2,3
   @GetMapping
   public ResponseEntity<List<BinaryContent>> findAllByIdIn(
-      @RequestParam("ids") List<UUID> binaryContentIds) {
+      @RequestParam("binaryContentIds") List<UUID> binaryContentIds) {
     List<BinaryContent> binaryContents = binaryContentService.findAllByIdIn(binaryContentIds);
     return ResponseEntity
         .status(HttpStatus.OK)

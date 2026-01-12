@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.controller.api.MessageApi;
 import com.sprint.mission.discodeit.dto.request.BinaryContentCreateRequest;
 import com.sprint.mission.discodeit.dto.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.request.MessageUpdateRequest;
@@ -19,9 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,17 +30,13 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/messages")
-public class MessageController {
+public class MessageController implements MessageApi {
 
   private final MessageService messageService;
 
   //메세지 생성
-  @PostMapping(
-      path = "/channel/{channelId}",
-      consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-  )
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Message> create(
-      @PathVariable UUID channelId,
       @RequestPart("messageCreateRequest") MessageCreateRequest messageCreateRequest,
       @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
   ) {
@@ -66,9 +63,9 @@ public class MessageController {
   }
 
   //메세지 수정
-  @PatchMapping("/{messageId}")
+  @PatchMapping(path = "/{messageId}")
   public ResponseEntity<Message> update(
-      @PathVariable UUID messageId,
+      @PathVariable("messageId") UUID messageId,
       @RequestBody MessageUpdateRequest request) {
     Message updatedMessage = messageService.update(messageId, request);
     return ResponseEntity
@@ -77,9 +74,9 @@ public class MessageController {
   }
 
   //메세지 삭제
-  @DeleteMapping("/{messageId}")
+  @DeleteMapping(path = "/{messageId}")
   public ResponseEntity<Void> delete(
-      @PathVariable UUID messageId) {
+      @PathVariable("messageId") UUID messageId) {
     messageService.delete(messageId);
     return ResponseEntity
         .status(HttpStatus.NO_CONTENT)
@@ -87,9 +84,9 @@ public class MessageController {
   }
 
   //사용자 기준 메세지 전체 조회
-  @GetMapping("/channel/{channelId}")
+  @GetMapping
   public ResponseEntity<List<Message>> findAllByChannelId(
-      @PathVariable UUID channelId) {
+      @RequestParam("channelId") UUID channelId) {
     List<Message> messages = messageService.findAllByChannelId(channelId);
     return ResponseEntity
         .status(HttpStatus.OK)

@@ -1,0 +1,928 @@
+{
+	"info": {
+		"_postman_id": "e1498eb5-cbd5-495d-b798-eb856e5aaa50",
+		"name": "sprint-mission-5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50902018",
+		"_collection_link": "https://swj9675-6589738.postman.co/workspace/woong's-Workspace~727d1914-e63e-4133-8ccc-33fccdd8dbf4/collection/50902018-e1498eb5-cbd5-495d-b798-eb856e5aaa50?action=share&source=collection_link&creator=50902018"
+	},
+	"item": [
+		{
+			"name": "user > 생성 (woody)",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "userCreateRequest",
+							"value": "{    \"username\": \"woody\",    \"email\": \"woody@codeit.com\",    \"password\": \"woody1234\"}",
+							"contentType": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "profile",
+							"contentType": "image/jpeg",
+							"type": "file",
+							"src": "postman-cloud:///1f0ea9c0-bbfe-4ad0-9227-626fd784e4da"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user > 생성 (buzz)",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "userCreateRequest",
+							"value": "{    \"username\": \"buzz\",    \"email\": \"buzz@codeit.com\",    \"password\": \"buzz1234\"}",
+							"contentType": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "profile",
+							"type": "file",
+							"src": "postman-cloud:///1f0ea9c4-0a10-4ea0-b75b-8f5c1bbdc24a"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user > 생성 (jessie)",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "userCreateRequest",
+							"value": "{    \"username\": \"jessie\",    \"email\": \"jessie@codeit.com\",    \"password\": \"jessie1234\"}",
+							"contentType": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "profile",
+							"type": "file",
+							"src": "postman-cloud:///1f0ea9c4-8897-40d0-bd99-16a3cdb574aa"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user > 생성 (rex)",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "userCreateRequest",
+							"value": "{    \"username\": \"rex\",    \"email\": \"rex@codeit.com\",    \"password\": \"rex1234\"}",
+							"contentType": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "profile",
+							"type": "file",
+							"src": "postman-cloud:///1f0ea9c4-f9e2-4f50-8279-221f2a6ae8e6"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user > 생성 (rex) > 실패",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "userCreateRequest",
+							"value": "{    \"username\": \"rex\",    \"email\": \"rex@codeit.com\",    \"password\": \"rex1234\"}",
+							"contentType": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "profile",
+							"type": "file",
+							"src": "YcSF_it14/rex.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user > 수정 (rex)",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "userUpdateRequest",
+							"value": "{   \"newUsername\": \"렉스\",    \"newPassword\": \"rex12345\"}",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/f978f6f9-0180-4d7a-bc9d-78fa008dd6b3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"f978f6f9-0180-4d7a-bc9d-78fa008dd6b3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user > 전체 조회",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "userStatus > 수정 (rex)",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"newLastActiveAt\": -1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/f978f6f9-0180-4d7a-bc9d-78fa008dd6b3/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"f978f6f9-0180-4d7a-bc9d-78fa008dd6b3",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user > 삭제 (rex)",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/users/f978f6f9-0180-4d7a-bc9d-78fa008dd6b3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"f978f6f9-0180-4d7a-bc9d-78fa008dd6b3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth > 로그인",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"woody\",\n    \"password\": \"woody1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "binaryContent > 단건 조회",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/binaryContents/b6796736-e8a9-4285-b93d-22d8109cec49",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"binaryContents",
+						"b6796736-e8a9-4285-b93d-22d8109cec49"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "binaryContent > 다건 조회",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/api/binaryContent/findAllByIdIn?binaryContentIds=76683e54-40b9-437a-b0cd-f477f63707a8,ce3d45a3-7f6c-4a2b-9868-8bd327c4f26f",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"binaryContent",
+						"findAllByIdIn"
+					],
+					"query": [
+						{
+							"key": "binaryContentIds",
+							"value": "76683e54-40b9-437a-b0cd-f477f63707a8,ce3d45a3-7f6c-4a2b-9868-8bd327c4f26f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "channel > 생성 public",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"general\",\n    \"description\": \"일반 채널입니다.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/channels/public",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"channels",
+						"public"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "channel > 생성 private (woody<>buzz)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"participantIds\": [\n        \"87d04afa-acdc-43b5-a724-705562f5648f\",\n        \"e1c1b073-0fbf-496c-9f3c-084be9cf7401\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/channels/private",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"channels",
+						"private"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "channel > 생성 private (woody<>jessie)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"participantIds\": [\n        \"87d04afa-acdc-43b5-a724-705562f5648f\",\n        \"776c0393-9182-43d2-9e41-19a49990fbcd\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/channels/private",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"channels",
+						"private"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "channel > 수정",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"newName\": \"GENERAL\",\n    \"newDescription\": \"일반 채널입니다!!!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/channels/34353c74-ee1c-48d0-849d-59937e7f7711",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"channels",
+						"34353c74-ee1c-48d0-849d-59937e7f7711"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "channel > 다건 조회",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"channelId\": \"\",\n    \"newName\": \"\",\n    \"newDescription\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/channels?userId=e1c1b073-0fbf-496c-9f3c-084be9cf7401",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"channels"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "87d04afa-acdc-43b5-a724-705562f5648f",
+							"description": "woody's channels",
+							"disabled": true
+						},
+						{
+							"key": "userId",
+							"value": "776c0393-9182-43d2-9e41-19a49990fbcd",
+							"description": "jessie' chaennels",
+							"disabled": true
+						},
+						{
+							"key": "userId",
+							"value": "e1c1b073-0fbf-496c-9f3c-084be9cf7401",
+							"description": "buzz's channels"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "channel > 삭제 (PRIVATE woody<>jessie)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"channelId\": \"\",\n    \"newName\": \"\",\n    \"newDescription\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/channels/bcb67ab4-d49a-49e2-b442-adbfed953880",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"channels",
+						"bcb67ab4-d49a-49e2-b442-adbfed953880"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "message > 생성",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "messageCreateRequest",
+							"value": "{    \"content\": \"Hello~ Im woody!!\",    \"channelId\": \"34353c74-ee1c-48d0-849d-59937e7f7711\",    \"authorId\": \"87d04afa-acdc-43b5-a724-705562f5648f\"}",
+							"contentType": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "attachments",
+							"type": "file",
+							"src": "uyEu-tvib/rex.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/messages/channel/34353c74-ee1c-48d0-849d-59937e7f7711",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"messages",
+						"channel",
+						"34353c74-ee1c-48d0-849d-59937e7f7711"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "message > 수정",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"newContent\": \"안녕! 나는 우디야!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/messages/b4a41dec-4206-4606-918d-3b92e238a99e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"messages",
+						"b4a41dec-4206-4606-918d-3b92e238a99e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "message > 다건 조회",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/messages/channel/34353c74-ee1c-48d0-849d-59937e7f7711",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"messages",
+						"channel",
+						"34353c74-ee1c-48d0-849d-59937e7f7711"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "message > 삭제",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/messages/34353c74-ee1c-48d0-849d-59937e7f7711",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"messages",
+						"34353c74-ee1c-48d0-849d-59937e7f7711"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "readStatus > 생성",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"channelId\": \"34353c74-ee1c-48d0-849d-59937e7f7711\",\n    \"userId\": \"776c0393-9182-43d2-9e41-19a49990fbcd\",\n    \"lastReadAt\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/readStatuses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"readStatuses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "readStatus > 수정",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"newLastReadAt\": -1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/readStatuses/a37def32-3904-4b92-b73b-0554645b2b39",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"readStatuses",
+						"a37def32-3904-4b92-b73b-0554645b2b39"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "readStatus > 다건 조회",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/readStatuses?userId=776c0393-9182-43d2-9e41-19a49990fbcd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"readStatuses"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "776c0393-9182-43d2-9e41-19a49990fbcd"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
