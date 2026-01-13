@@ -40,7 +40,7 @@ public class UserController implements UserApi {
 
   //사용자 생성
   @PostMapping(
-      consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+      consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}
   )
   @Override
   public ResponseEntity<User> create(
