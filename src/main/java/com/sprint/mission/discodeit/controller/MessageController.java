@@ -1,9 +1,11 @@
 package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.controller.api.MessageApi;
+import com.sprint.mission.discodeit.dto.data.MessageDto;
 import com.sprint.mission.discodeit.dto.request.BinaryContentCreateRequest;
 import com.sprint.mission.discodeit.dto.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.request.MessageUpdateRequest;
+import com.sprint.mission.discodeit.dto.response.PageResponse;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.MessageService;
 import java.io.IOException;
@@ -36,7 +38,7 @@ public class MessageController implements MessageApi {
 
   //메세지 생성
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Message> create(
+  public ResponseEntity<MessageDto> create(
       @RequestPart("messageCreateRequest") MessageCreateRequest messageCreateRequest,
       @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
   ) {
@@ -56,7 +58,7 @@ public class MessageController implements MessageApi {
                 })
                 .toList())
             .orElse(new ArrayList<>());
-    Message createdMessage = messageService.create(messageCreateRequest, attachmentRequests);
+    MessageDto createdMessage = messageService.create(messageCreateRequest, attachmentRequests);
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .body(createdMessage);
@@ -64,10 +66,10 @@ public class MessageController implements MessageApi {
 
   //메세지 수정
   @PatchMapping(path = "/{messageId}")
-  public ResponseEntity<Message> update(
+  public ResponseEntity<MessageDto> update(
       @PathVariable("messageId") UUID messageId,
       @RequestBody MessageUpdateRequest request) {
-    Message updatedMessage = messageService.update(messageId, request);
+    MessageDto updatedMessage = messageService.update(messageId, request);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(updatedMessage);
@@ -83,13 +85,12 @@ public class MessageController implements MessageApi {
         .build();
   }
 
-  //사용자 기준 메세지 전체 조회
+  // 채널별 메시지 페이징 조회 (50개씩 최근순)
   @GetMapping
-  public ResponseEntity<List<Message>> findAllByChannelId(
-      @RequestParam("channelId") UUID channelId) {
-    List<Message> messages = messageService.findAllByChannelId(channelId);
-    return ResponseEntity
-        .status(HttpStatus.OK)
-        .body(messages);
+  public ResponseEntity<PageResponse<MessageDto>> findAllByChannelId(
+      @RequestParam UUID channelId,
+      @RequestParam(defaultValue = "0") int page) { // 페이지 번호를 받고, 기본값은 0으로 설정!
+
+    return ResponseEntity.ok(messageService.findAllByChannelId(channelId, page));
   }
 }

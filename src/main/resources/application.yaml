@@ -20,7 +20,9 @@ spring:
   # 2-2. jpa config
   jpa:
     database: postgresql
-    generate-ddl: false
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
@@ -39,3 +41,10 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
+
+# 4. custom config (discodeit 전용 설정)
+discodeit:
+  storage:
+    type: local        #
+    local:
+      root-path: ./storage_data  # 실제 파일이 저장될 폴더 경로입니다.

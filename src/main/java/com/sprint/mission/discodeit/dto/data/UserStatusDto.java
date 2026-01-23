@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.dto.data;
 
+import java.time.Instant;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,11 +9,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserStatusDto {
 
   private UUID id;
-  private String username;
-  private String email;
-  private BinaryContentDto profile;
-  private Boolean online;
+  private UUID userId;
+  private Instant lastActiveAt;
 }

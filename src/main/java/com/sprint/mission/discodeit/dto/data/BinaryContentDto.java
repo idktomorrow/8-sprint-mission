@@ -8,11 +8,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class BinaryContentDto {
 
   private UUID id;
-  private String username;
-  private String email;
-  private BinaryContentDto profile;
-  private Boolean online;
+  private String fileName;
+  private Long size;
+  private String contentType;
 }
