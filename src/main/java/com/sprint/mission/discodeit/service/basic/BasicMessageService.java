@@ -64,7 +64,7 @@ public class BasicMessageService implements MessageService {
           );
           BinaryContent savedContent = binaryContentRepository.save(content);
 
-          binaryContentStorage.put(savedContent.getId(), req.bytes());
+          binaryContentStorage.save(savedContent.getId(), req.bytes());
 
           return savedContent;
         })

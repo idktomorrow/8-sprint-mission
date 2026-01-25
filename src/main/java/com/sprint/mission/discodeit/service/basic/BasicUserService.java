@@ -55,7 +55,7 @@ public class BasicUserService implements UserService {
           );
           BinaryContent savedContent = binaryContentRepository.save(binaryContent);
 
-          binaryContentStorage.put(savedContent.getId(), profileRequest.bytes());
+          binaryContentStorage.save(savedContent.getId(), profileRequest.bytes());
 
           return savedContent;
         })
@@ -102,7 +102,7 @@ public class BasicUserService implements UserService {
 
           BinaryContent savedContent = binaryContentRepository.save(binaryContent);
 
-          binaryContentStorage.put(savedContent.getId(), profileRequest.bytes());
+          binaryContentStorage.save(savedContent.getId(), profileRequest.bytes());
 
           return savedContent;
         })

@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,11 +51,17 @@ public class BinaryContentController implements BinaryContentApi {
 
   @Override
   @GetMapping("/download")
-  public ResponseEntity<?> download( // 미션지 요구대로 <?> 사용
-      @RequestParam("binaryContentId") UUID binaryContentId) {
+  public ResponseEntity<Resource> download(@RequestParam("binaryContentId") UUID binaryContentId) {
 
-    BinaryContentDto binaryContentDto = binaryContentService.find(binaryContentId);
-    
-    return binaryContentStorage.download(binaryContentDto);
+    BinaryContentDto dto = binaryContentService.find(binaryContentId);
+
+    Resource resource = binaryContentStorage.loadAsResource(dto.getId());
+
+    return ResponseEntity.ok()
+        .header(HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=\"" + dto.getFileName() + "\"")
+        .contentType(MediaType.parseMediaType(dto.getContentType()))
+        .contentLength(dto.getSize())
+        .body(resource);
   }
 }

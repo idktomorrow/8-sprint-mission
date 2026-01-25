@@ -3,12 +3,14 @@ package com.sprint.mission.discodeit.storage;
 import com.sprint.mission.discodeit.dto.data.BinaryContentDto;
 import jakarta.annotation.PostConstruct;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +37,7 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
   }
 
   @Override
-  public UUID put(UUID id, byte[] bytes) {
+  public UUID save(UUID id, byte[] bytes) {
     Path targetPath = resolvePath(id); // [요구사항] resolvePath 활용
     try {
       Files.write(targetPath, bytes);
@@ -46,7 +48,7 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
   }
 
   @Override
-  public InputStream get(UUID id) {
+  public InputStream openStream(UUID id) {
     Path targetPath = resolvePath(id);
     try {
       return Files.newInputStream(targetPath);
@@ -56,18 +58,15 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
   }
 
   @Override
-  public ResponseEntity<Resource> download(BinaryContentDto dto) {
-    InputStream inputStream = get(dto.getId()); // [요구사항] get 메소드를 통해 데이터 조회
-    Resource resource = new InputStreamResource(inputStream);
-
-    // [요구사항] BinaryContentDto 정보를 활용해 응답 생성
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=\"" + dto.getFileName() + "\"")
-        .contentType(MediaType.parseMediaType(dto.getContentType()))
-        .contentLength(dto.getSize())
-        .body(resource);
+  public Resource loadAsResource(UUID id) {
+    Path targetPath = resolvePath(id);
+    try {
+      return new UrlResource(targetPath.toUri());
+    } catch (MalformedURLException e) {
+      throw new RuntimeException("Failed to load file as resource", e);
+    }
   }
+
 
   // [요구사항] 파일 저장 위치 규칙 정의: {root}/{UUID}
   private Path resolvePath(UUID id) {
