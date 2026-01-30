@@ -36,7 +36,7 @@ public class BasicReadStatusService implements ReadStatusService {
     Channel channel = channelRepository.findById(request.channelId())
         .orElseThrow(() -> new NoSuchElementException("Channel not found: " + request.channelId()));
 
-    if (readStatusRepository.findByUserAndChannel(user, channel).isPresent()) {
+    if (readStatusRepository.findByUserIdAndChannelId(user.getId(), channel.getId()).isPresent()) {
       throw new IllegalArgumentException("ReadStatus already exists for this user and channel");
     }
 

@@ -50,12 +50,12 @@ public class BasicUserService implements UserService {
         .map(profileRequest -> {
           BinaryContent binaryContent = new BinaryContent(
               profileRequest.fileName(),
-              (long) profileRequest.bytes().length,
+              profileRequest.size(),
               profileRequest.contentType()
           );
           BinaryContent savedContent = binaryContentRepository.save(binaryContent);
 
-          binaryContentStorage.save(savedContent.getId(), profileRequest.bytes());
+          binaryContentStorage.save(savedContent.getId(), profileRequest.inputStream());
 
           return savedContent;
         })
@@ -92,17 +92,18 @@ public class BasicUserService implements UserService {
     BinaryContent newProfile = optionalProfileCreateRequest
         .map(profileRequest -> {
           if (user.getProfile() != null) {
+            binaryContentStorage.delete(user.getProfile().getId());
             binaryContentRepository.delete(user.getProfile());
           }
           BinaryContent binaryContent = new BinaryContent(
               profileRequest.fileName(),
-              (long) profileRequest.bytes().length,
+              profileRequest.size(),
               profileRequest.contentType()
           );
 
           BinaryContent savedContent = binaryContentRepository.save(binaryContent);
 
-          binaryContentStorage.save(savedContent.getId(), profileRequest.bytes());
+          binaryContentStorage.save(savedContent.getId(), profileRequest.inputStream());
 
           return savedContent;
         })
@@ -118,7 +119,15 @@ public class BasicUserService implements UserService {
   public void delete(UUID userId) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " not found"));
+
+    if (user.getProfile() != null) {
+      UUID profileId = user.getProfile().getId();
+
+      binaryContentStorage.delete(profileId);
+
+      binaryContentRepository.delete(user.getProfile());
+    }
+
     userRepository.delete(user);
   }
-
 }

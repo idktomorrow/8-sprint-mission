@@ -32,18 +32,18 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
     try {
       Files.createDirectories(root);
     } catch (IOException e) {
-      throw new RuntimeException("Could not initialize storage", e);
+      throw new UncheckedIOException("Could not initialize storage", e);
     }
   }
 
   @Override
-  public UUID save(UUID id, byte[] bytes) {
+  public UUID save(UUID id, InputStream inputStream) {
     Path targetPath = resolvePath(id); // [요구사항] resolvePath 활용
     try {
-      Files.write(targetPath, bytes);
+      Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
       return id;
     } catch (IOException e) {
-      throw new RuntimeException("Failed to store file", e);
+      throw new UncheckedIOException("Failed to store file", e);
     }
   }
 
@@ -53,7 +53,7 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
     try {
       return Files.newInputStream(targetPath);
     } catch (IOException e) {
-      throw new RuntimeException("Failed to read file", e);
+      throw new UncheckedIOException("Failed to read file", e);
     }
   }
 
@@ -63,10 +63,20 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
     try {
       return new UrlResource(targetPath.toUri());
     } catch (MalformedURLException e) {
-      throw new RuntimeException("Failed to load file as resource", e);
+      throw new UncheckedIOException("Failed to load file as resource", e);
     }
   }
 
+  @Override
+  public void delete(UUID id) {
+    Path filePath = resolvePath(id);
+    try {
+      // 파일이 존재할 때만 삭제 (없으면 무시)
+      Files.deleteIfExists(filePath);
+    } catch (IOException e) {
+      throw new UncheckedIOException("파일 삭제 중 오류가 발생했습니다: " + id, e);
+    }
+  }
 
   // [요구사항] 파일 저장 위치 규칙 정의: {root}/{UUID}
   private Path resolvePath(UUID id) {

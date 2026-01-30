@@ -28,12 +28,12 @@ public class BasicBinaryContentService implements BinaryContentService {
   public BinaryContentDto create(BinaryContentCreateRequest request) {
     BinaryContent binaryContent = new BinaryContent(
         request.fileName(),
-        (long) request.bytes().length,
+        (long) request.size(),
         request.contentType()
     );
     BinaryContent savedContent = binaryContentRepository.save(binaryContent);
 
-    binaryContentStorage.save(savedContent.getId(), request.bytes());
+    binaryContentStorage.save(savedContent.getId(), request.inputStream());
 
     return binaryContentMapper.toDto(savedContent);
   }

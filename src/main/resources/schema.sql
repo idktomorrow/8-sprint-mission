@@ -14,8 +14,7 @@ CREATE TABLE "binary_contents"
     "created_at"   timestamptz  NOT NULL, -- NN
     "file_name"    varchar(255) NOT NULL, -- NN
     "size"         bigint       NOT NULL, -- NN
-    "content_type" varchar(100) NOT NULL, -- NN
-    "bytes"        bytea        NOT NULL  -- NN
+    "content_type" varchar(100) NOT NULL  -- NN
 );
 
 CREATE TABLE "users"
@@ -102,6 +101,8 @@ ALTER TABLE "user_statuses"
     ADD CONSTRAINT "UK_USER_STATUSES_USER_ID" UNIQUE ("user_id");
 ALTER TABLE "read_statuses"
     ADD CONSTRAINT "UK_READ_STATUSES_USER_CHANNEL" UNIQUE ("user_id", "channel_id");
+ALTER TABLE "message_attachments"
+    ADD CONSTRAINT "UK_MESSAGE_ATTACHMENTS_ATTACHMENT_ID" UNIQUE ("attachment_id");
 
 --Check Constraints
 ALTER TABLE "channels"
@@ -140,3 +141,22 @@ ALTER TABLE "message_attachments"
 ALTER TABLE "message_attachments"
     ADD CONSTRAINT "FK_MESSAGE_ATTACHMENTS_ATTACHMENT"
         FOREIGN KEY ("attachment_id") REFERENCES "binary_contents" ("id") ON DELETE CASCADE;
+
+-- [Messages 테이블 인덱스]
+-- 채널별 메시지 조회 및 정렬 성능 최적화
+CREATE INDEX idx_messages_channel_id ON messages (channel_id);
+CREATE INDEX idx_messages_author_id ON messages (author_id);
+CREATE INDEX idx_messages_created_at ON messages (created_at DESC);
+-- 복합 인덱스: 특정 채널 내에서 최신순 조회를 위해 필수
+CREATE INDEX idx_messages_channel_created ON messages (channel_id, created_at DESC);
+
+-- [ReadStatus 테이블 인덱스]
+-- 유저/채널별 조회 및 복합 조건 검색 성능 최적화
+CREATE INDEX idx_read_statuses_user_id ON read_statuses (user_id);
+CREATE INDEX idx_read_statuses_channel_id ON read_statuses (channel_id);
+CREATE INDEX idx_read_statuses_user_channel ON read_statuses (user_id, channel_id);
+
+-- [MessageAttachments 테이블 인덱스]
+-- 메시지와 첨부파일 간 조인 및 검색 성능 최적화
+CREATE INDEX idx_message_attachments_message_id ON message_attachments (message_id);
+CREATE INDEX idx_message_attachments_attachment_id ON message_attachments (attachment_id);

@@ -46,29 +46,11 @@ public class BasicMessageService implements MessageService {
   @Override
   public MessageDto create(MessageCreateRequest messageCreateRequest,
       List<BinaryContentCreateRequest> binaryContentCreateRequests) {
-    UUID channelId = messageCreateRequest.channelId();
-    UUID authorId = messageCreateRequest.authorId();
 
-    Channel channel = channelRepository.findById(messageCreateRequest.channelId())
-        .orElseThrow(() -> new NoSuchElementException("Channel not found"));
+    Channel channel = findChannel(messageCreateRequest.channelId());
+    User author = findUser(messageCreateRequest.authorId());
 
-    User author = userRepository.findById(messageCreateRequest.authorId())
-        .orElseThrow(() -> new NoSuchElementException("User not found"));
-
-    List<BinaryContent> attachments = binaryContentCreateRequests.stream()
-        .map(req -> {
-          BinaryContent content = new BinaryContent(
-              req.fileName(),
-              (long) req.bytes().length,
-              req.contentType()
-          );
-          BinaryContent savedContent = binaryContentRepository.save(content);
-
-          binaryContentStorage.save(savedContent.getId(), req.bytes());
-
-          return savedContent;
-        })
-        .toList();
+    List<BinaryContent> attachments = saveAttachments(binaryContentCreateRequests);
 
     Message message = new Message(
         messageCreateRequest.content(),
@@ -77,7 +59,39 @@ public class BasicMessageService implements MessageService {
         attachments
     );
     Message savedMessage = messageRepository.save(message);
+
     return messageMapper.toDto(savedMessage);
+  }
+
+  private Channel findChannel(UUID channelId) {
+    return channelRepository.findById(channelId)
+        .orElseThrow(() -> new NoSuchElementException("Channel not found: " + channelId));
+  }
+
+  private User findUser(UUID authorId) {
+    return userRepository.findById(authorId)
+        .orElseThrow(() -> new NoSuchElementException("User not found: " + authorId));
+  }
+
+  private List<BinaryContent> saveAttachments(List<BinaryContentCreateRequest> requests) {
+    if (requests == null || requests.isEmpty()) {
+      return List.of();
+    }
+
+    return requests.stream()
+        .map(req -> {
+          BinaryContent content = new BinaryContent(
+              req.fileName(),
+              req.size(),
+              req.contentType()
+          );
+          BinaryContent savedContent = binaryContentRepository.save(content);
+
+          binaryContentStorage.save(savedContent.getId(), req.inputStream());
+
+          return savedContent;
+        })
+        .toList();
   }
 
   @Override

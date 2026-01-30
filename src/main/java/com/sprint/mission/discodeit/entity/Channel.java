@@ -37,18 +37,6 @@ public class Channel extends BaseUpdatableEntity {
   @Column
   private Instant lastMessageAt;
 
-  // [추가] 참여자 목록 (다대다 관계)
-  @ManyToMany
-  @JoinTable(
-      name = "channel_participants",
-      joinColumns = @JoinColumn(name = "channel_id"),
-      inverseJoinColumns = @JoinColumn(name = "user_id")
-  )
-  private List<User> participants = new ArrayList<>();
-
-  public void updateLastMessageAt() {
-    this.lastMessageAt = Instant.now();
-  }
 
   public Channel(ChannelType type, String name, String description) {
     this.type = type;
