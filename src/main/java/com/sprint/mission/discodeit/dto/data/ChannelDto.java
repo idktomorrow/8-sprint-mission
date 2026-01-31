@@ -5,13 +5,21 @@ import com.sprint.mission.discodeit.entity.ChannelType;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public record ChannelDto(
-        UUID id,
-        ChannelType type,
-        String name,
-        String description,
-        List<UUID> participantIds,
-        Instant lastMessageAt
-) {
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class ChannelDto {
+
+  private UUID id;
+  private ChannelType type;
+  private String name;
+  private String description;
+
+  private List<UserDto> participants;
+
+  private Instant lastMessageAt;
 }
