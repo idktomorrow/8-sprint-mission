@@ -40,6 +40,10 @@ dependencies {
     //postgresql 의존성 추가
     runtimeOnly 'org.postgresql:postgresql'
 
+    //mapstruct 의존성 추가
+    implementation 'org.mapstruct:mapstruct:1.6.3'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+
 }
 
 

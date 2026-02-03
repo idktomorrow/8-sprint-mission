@@ -6,26 +6,31 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.AuthService;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true)
 public class BasicAuthService implements AuthService {
 
   private final UserRepository userRepository;
   private final UserMapper userMapper;
 
+  @Transactional(readOnly = true)
   @Override
   public UserDto login(LoginRequest loginRequest) {
+    String username = loginRequest.username();
+    String password = loginRequest.password();
 
-    User user = userRepository.findByUsername(loginRequest.username())
-        .filter(u -> u.getPassword().equals(loginRequest.password()))
-        .orElseThrow(() -> new NoSuchElementException("아이디 또는 비밀번호가 잘못되었습니다."));
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(
+            () -> new NoSuchElementException("User with username " + username + " not found"));
+
+    if (!user.getPassword().equals(password)) {
+      throw new IllegalArgumentException("Wrong password");
+    }
 
     return userMapper.toDto(user);
   }

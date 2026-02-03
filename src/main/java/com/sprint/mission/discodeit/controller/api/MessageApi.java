@@ -12,12 +12,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Message", description = "Message API")
@@ -75,19 +75,16 @@ public interface MessageApi {
       @Parameter(description = "삭제할 Message ID") UUID messageId
   );
 
-  @Operation(summary = "Channel의 Message 목록 조회(페이징)")
+  @Operation(summary = "Channel의 Message 목록 조회")
   @ApiResponses(value = {
       @ApiResponse(
           responseCode = "200", description = "Message 목록 조회 성공",
-          // 이제 List가 아니라 PageResponse라는 큰 상자를 돌려준다고 알려줍니다.
           content = @Content(schema = @Schema(implementation = PageResponse.class))
       )
   })
-
-  @GetMapping
   ResponseEntity<PageResponse<MessageDto>> findAllByChannelId(
-      @Parameter(description = "조회할 Channel ID") @RequestParam("channelId") UUID channelId,
-      // 사용자가 page 번호를 안 보내면 0번(첫 페이지)을 보여주도록 설정합니다.
-      @Parameter(description = "페이지 번호 (0부터 시작)") @RequestParam(value = "page", defaultValue = "0") int page
+      @Parameter(description = "조회할 Channel ID") UUID channelId,
+      @Parameter(description = "페이징 커서 정보") Instant cursor,
+      @Parameter(description = "페이징 정보", example = "{\"size\": 50, \"sort\": \"createdAt,desc\"}") Pageable pageable
   );
-}
+} 

@@ -17,126 +17,116 @@ import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
+import java.time.Instant;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-
 @RequiredArgsConstructor
 @Service
-@Transactional
 public class BasicMessageService implements MessageService {
 
   private final MessageRepository messageRepository;
   //
   private final ChannelRepository channelRepository;
   private final UserRepository userRepository;
-  private final BinaryContentRepository binaryContentRepository;
   private final MessageMapper messageMapper;
   private final BinaryContentStorage binaryContentStorage;
+  private final BinaryContentRepository binaryContentRepository;
   private final PageResponseMapper pageResponseMapper;
 
+  @Transactional
   @Override
   public MessageDto create(MessageCreateRequest messageCreateRequest,
       List<BinaryContentCreateRequest> binaryContentCreateRequests) {
+    UUID channelId = messageCreateRequest.channelId();
+    UUID authorId = messageCreateRequest.authorId();
 
-    Channel channel = findChannel(messageCreateRequest.channelId());
-    User author = findUser(messageCreateRequest.authorId());
+    Channel channel = channelRepository.findById(channelId)
+        .orElseThrow(
+            () -> new NoSuchElementException("Channel with id " + channelId + " does not exist"));
+    User author = userRepository.findById(authorId)
+        .orElseThrow(
+            () -> new NoSuchElementException("Author with id " + authorId + " does not exist")
+        );
 
-    List<BinaryContent> attachments = saveAttachments(binaryContentCreateRequests);
+    List<BinaryContent> attachments = binaryContentCreateRequests.stream()
+        .map(attachmentRequest -> {
+          String fileName = attachmentRequest.fileName();
+          String contentType = attachmentRequest.contentType();
+          byte[] bytes = attachmentRequest.bytes();
 
+          BinaryContent binaryContent = new BinaryContent(fileName, (long) bytes.length,
+              contentType);
+          binaryContentRepository.save(binaryContent);
+          binaryContentStorage.put(binaryContent.getId(), bytes);
+          return binaryContent;
+        })
+        .toList();
+
+    String content = messageCreateRequest.content();
     Message message = new Message(
-        messageCreateRequest.content(),
+        content,
         channel,
         author,
         attachments
     );
-    Message savedMessage = messageRepository.save(message);
 
-    return messageMapper.toDto(savedMessage);
+    messageRepository.save(message);
+    return messageMapper.toDto(message);
   }
 
-  private Channel findChannel(UUID channelId) {
-    return channelRepository.findById(channelId)
-        .orElseThrow(() -> new NoSuchElementException("Channel not found: " + channelId));
-  }
-
-  private User findUser(UUID authorId) {
-    return userRepository.findById(authorId)
-        .orElseThrow(() -> new NoSuchElementException("User not found: " + authorId));
-  }
-
-  private List<BinaryContent> saveAttachments(List<BinaryContentCreateRequest> requests) {
-    if (requests == null || requests.isEmpty()) {
-      return List.of();
-    }
-
-    return requests.stream()
-        .map(req -> {
-          BinaryContent content = new BinaryContent(
-              req.fileName(),
-              req.size(),
-              req.contentType()
-          );
-          BinaryContent savedContent = binaryContentRepository.save(content);
-
-          binaryContentStorage.save(savedContent.getId(), req.inputStream());
-
-          return savedContent;
-        })
-        .toList();
-  }
-
+  @Transactional(readOnly = true)
   @Override
   public MessageDto find(UUID messageId) {
-    Message message = messageRepository.findById(messageId)
+    return messageRepository.findById(messageId)
+        .map(messageMapper::toDto)
         .orElseThrow(
             () -> new NoSuchElementException("Message with id " + messageId + " not found"));
-
-    return messageMapper.toDto(message);
   }
 
+  @Transactional(readOnly = true)
   @Override
-  public PageResponse<MessageDto> findAllByChannelId(UUID channelId, int page) {
-    // A. 50개씩, 최근 순서(createdAt 내림차순)로 가져오겠다는 설정
-    Pageable pageable = PageRequest.of(page, 50, Sort.by("createdAt").descending());
+  public PageResponse<MessageDto> findAllByChannelId(UUID channelId, Instant createAt,
+      Pageable pageable) {
+    Slice<MessageDto> slice = messageRepository.findAllByChannelIdWithAuthor(channelId,
+            Optional.ofNullable(createAt).orElse(Instant.now()),
+            pageable)
+        .map(messageMapper::toDto);
 
-    // B. 리포지토리에서 Slice(전체 개수 안 세는 방식)로 가져오기
-    Slice<Message> messageSlice = messageRepository.findAllByChannelId(channelId, pageable);
+    Instant nextCursor = null;
+    if (!slice.getContent().isEmpty()) {
+      nextCursor = slice.getContent().get(slice.getContent().size() - 1)
+          .createdAt();
+    }
 
-    // C. 가져온 Entity들을 DTO로 하나씩 변환하기
-    Slice<MessageDto> messageDtoSlice = messageSlice.map(messageMapper::toDto);
-
-    // D. 웅제님이 만든 PageResponse 상자에 담아서 리턴!
-    return pageResponseMapper.from(messageDtoSlice);
+    return pageResponseMapper.fromSlice(slice, nextCursor);
   }
 
+  @Transactional
   @Override
   public MessageDto update(UUID messageId, MessageUpdateRequest request) {
+    String newContent = request.newContent();
     Message message = messageRepository.findById(messageId)
         .orElseThrow(
             () -> new NoSuchElementException("Message with id " + messageId + " not found"));
-
-    message.update(request.newContent());
+    message.update(newContent);
     return messageMapper.toDto(message);
   }
 
+  @Transactional
   @Override
   public void delete(UUID messageId) {
-    Message message = messageRepository.findById(messageId)
-        .orElseThrow(
-            () -> new NoSuchElementException("Message with id " + messageId + " not found"));
+    if (!messageRepository.existsById(messageId)) {
+      throw new NoSuchElementException("Message with id " + messageId + " not found");
+    }
 
-    // message.getAttachmentIds()
-    //         .forEach(binaryContentRepository::deleteById);
-
-    messageRepository.delete(message);
+    messageRepository.deleteById(messageId);
   }
 }

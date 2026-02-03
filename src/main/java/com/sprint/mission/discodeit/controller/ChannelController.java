@@ -28,8 +28,7 @@ public class ChannelController implements ChannelApi {
 
   private final ChannelService channelService;
 
-  //공개 채널 생성
-  @PostMapping(path = "/public")
+  @PostMapping(path = "public")
   public ResponseEntity<ChannelDto> create(@RequestBody PublicChannelCreateRequest request) {
     ChannelDto createdChannel = channelService.create(request);
     return ResponseEntity
@@ -37,8 +36,7 @@ public class ChannelController implements ChannelApi {
         .body(createdChannel);
   }
 
-  //비공개 채널 생성
-  @PostMapping(path = "/private")
+  @PostMapping(path = "private")
   public ResponseEntity<ChannelDto> create(@RequestBody PrivateChannelCreateRequest request) {
     ChannelDto createdChannel = channelService.create(request);
     return ResponseEntity
@@ -46,31 +44,25 @@ public class ChannelController implements ChannelApi {
         .body(createdChannel);
   }
 
-  //채널 수정
-  @PatchMapping(path = "/{channelId}")
-  public ResponseEntity<ChannelDto> update(
-      @PathVariable("channelId") UUID channelId,
+  @PatchMapping(path = "{channelId}")
+  public ResponseEntity<ChannelDto> update(@PathVariable("channelId") UUID channelId,
       @RequestBody PublicChannelUpdateRequest request) {
-    ChannelDto udpatedChannel = channelService.update(channelId, request);
+    ChannelDto updatedChannel = channelService.update(channelId, request);
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(udpatedChannel);
+        .body(updatedChannel);
   }
 
-  //채널 삭제
-  @DeleteMapping(path = "/{channelId}")
-  public ResponseEntity<Void> delete(
-      @PathVariable("channelId") UUID channelId) {
+  @DeleteMapping(path = "{channelId}")
+  public ResponseEntity<Void> delete(@PathVariable("channelId") UUID channelId) {
     channelService.delete(channelId);
     return ResponseEntity
         .status(HttpStatus.NO_CONTENT)
         .build();
   }
 
-  //사용자 기준 채널 전체 조회
   @GetMapping
-  public ResponseEntity<List<ChannelDto>> findAll(
-      @RequestParam("userId") UUID userId) {
+  public ResponseEntity<List<ChannelDto>> findAll(@RequestParam("userId") UUID userId) {
     List<ChannelDto> channels = channelService.findAllByUserId(userId);
     return ResponseEntity
         .status(HttpStatus.OK)
