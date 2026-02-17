@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public interface ReadStatusApi {
       )
   })
   ResponseEntity<ReadStatusDto> create(
-      @Parameter(description = "Message 읽음 상태 생성 정보") ReadStatusCreateRequest request
+      @Parameter(description = "Message 읽음 상태 생성 정보") @Valid ReadStatusCreateRequest request
   );
 
   @Operation(summary = "Message 읽음 상태 수정")
@@ -52,7 +53,7 @@ public interface ReadStatusApi {
   })
   ResponseEntity<ReadStatusDto> update(
       @Parameter(description = "수정할 읽음 상태 ID") UUID readStatusId,
-      @Parameter(description = "수정할 읽음 상태 정보") ReadStatusUpdateRequest request
+      @Parameter(description = "수정할 읽음 상태 정보") @Valid ReadStatusUpdateRequest request
   );
 
   @Operation(summary = "User의 Message 읽음 상태 목록 조회")
