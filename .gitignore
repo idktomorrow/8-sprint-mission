@@ -41,6 +41,9 @@ bin/
 ### Discodeit ###
 .discodeit
 
+### env ###
+.env
+
 ### 숨김 파일 ###
 *.ser
 *.log
@@ -48,6 +51,7 @@ bin/
 storage_data/
 data/
 file-data-map/
+postgres_data/
 
 ### 예외 처리 ###
 !.gitignore
