@@ -42,7 +42,12 @@ bin/
 .discodeit
 
 ### 숨김 파일 ###
-.*
+*.ser
+*.log
+.logs/
+storage_data/
+data/
+file-data-map/
 
 ### 예외 처리 ###
 !.gitignore
