@@ -19,6 +19,8 @@ services:
     container_name: discodeit-app
     depends_on:
       - db   # DB가 먼저 켜져야 함
+    env_file:
+      - .env
     environment:
       SPRING_PROFILES_ACTIVE: ${APP_PROFILE}
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
