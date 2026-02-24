@@ -2,6 +2,8 @@ name: CI - Test
 
 # main 브랜치에 Pull Request가 생성될 때 실행
 on:
+  push:
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
