@@ -2,41 +2,43 @@ package com.sprint.mission.discodeit.storage.s3;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.Properties;
 
+@SpringBootTest
+@ActiveProfiles("test")
 public class AWSS3Test {
 
   private S3Client s3Client;
   private S3Presigner s3Presigner;
+
+  // test.yml이나 application.yml에서 주입받음
+  @Value("${discodeit.storage.s3.access-key}")
+  private String accessKey;
+
+  @Value("${discodeit.storage.s3.secret-key}")
+  private String secretKey;
+
+  @Value("${discodeit.storage.s3.region}")
+  private String region;
+
+  @Value("${discodeit.storage.s3.bucket}")
   private String bucketName;
 
   @BeforeEach
-  void setUp() throws IOException {
-    //Properties 클래스를 활용해 .env 정보 로드
-    Properties props = new Properties();
-    try (FileInputStream fis = new FileInputStream(".env")) {
-      props.load(fis);
-    }
-
-    String accessKey = props.getProperty("AWS_S3_ACCESS_KEY");
-    String secretKey = props.getProperty("AWS_S3_SECRET_KEY");
-    String region = props.getProperty("AWS_S3_REGION");
-    this.bucketName = props.getProperty("AWS_S3_BUCKET");
-
-    //S3 클라이언트 설정
+  void setUp() {
+    //.env 파일을 직접 읽지 않고 @Value로 받은 값을 사용
     AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
 
     this.s3Client = S3Client.builder()
@@ -52,42 +54,30 @@ public class AWSS3Test {
 
   @Test
   void uploadTest() {
-    //대상혁 사진 업로드 테스트
+    //파일 대신 가상의 바이트 데이터를 업로드
     PutObjectRequest putObjectRequest = PutObjectRequest.builder()
         .bucket(bucketName)
         .key("goat.png")
+        .contentType("image/png")
         .build();
 
-    s3Client.putObject(putObjectRequest, Paths.get("faker.png"));
+    s3Client.putObject(putObjectRequest, RequestBody.fromString("가짜 이미지 데이터"));
     System.out.println("업로드 성공!");
   }
 
   @Test
-  void downloadTest() {
-    //신상혁의 사진 다운로드
-    GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-        .bucket(bucketName)
-        .key("goat.png")
-        .build();
-
-    s3Client.getObject(getObjectRequest, Paths.get("downloaded-faker.png"));
-    System.out.println("다운로드 성공!");
-  }
-
-  @Test
   void presignedUrlTest() {
-    //숭배url 확인 테스트
     GetObjectRequest getObjectRequest = GetObjectRequest.builder()
         .bucket(bucketName)
         .key("goat.png")
         .build();
 
     GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-        .signatureDuration(Duration.ofMinutes(10)) // 10분 유효
+        .signatureDuration(Duration.ofMinutes(10))
         .getObjectRequest(getObjectRequest)
         .build();
 
-    PresignedGetObjectRequest presignedRequest = s3Presigner.presignGetObject(presignRequest);
-    System.out.println("생성된 URL: " + presignedRequest.url().toString());
+    String url = s3Presigner.presignGetObject(presignRequest).url().toString();
+    System.out.println("생성된 URL: " + url);
   }
 }

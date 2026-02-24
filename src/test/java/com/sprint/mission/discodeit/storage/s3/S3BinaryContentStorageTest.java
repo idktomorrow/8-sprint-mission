@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(properties = "discodeit.storage.type=s3")
-@ActiveProfiles("dev") // .env 설정값을 읽어오기 위해 설정된 프로필
+@ActiveProfiles("test")
 class S3BinaryContentStorageTest {
 
   @Autowired
