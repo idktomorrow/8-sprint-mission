@@ -80,4 +80,17 @@ public class AWSS3Test {
     String url = s3Presigner.presignGetObject(presignRequest).url().toString();
     System.out.println("생성된 URL: " + url);
   }
+
+  @Test
+  void downloadTest() {
+    // S3에서 데이터를 가져와서 출력이 잘 되는지 확인
+    GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+        .bucket(bucketName)
+        .key("goat.png")
+        .build();
+
+    // 실제 파일로 저장하지 않고 응답이 오는지 확인
+    s3Client.getObject(getObjectRequest);
+    System.out.println("다운로드 시도 성공!");
+  }
 }
