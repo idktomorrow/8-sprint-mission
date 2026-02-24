@@ -49,7 +49,7 @@ bin/
 *.log
 .logs/
 storage_data/
-data/
+/data/
 file-data-map/
 postgres_data/
 
