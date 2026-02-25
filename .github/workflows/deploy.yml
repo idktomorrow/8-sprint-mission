@@ -58,25 +58,25 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Stop existing ECS service (and wait)
         run: |
-          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --desired-count 0 --region ${{ env.AWS_REGION }}
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --desired-count 0 --region ${{ vars.AWS_REGION }}
           
           sleep 30
 
 
       - name: Update ECS task definition
         run: |
-          aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_DEFINITION }} --region ap-northeast-2 > task-def.json
+          aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_DEFINITION }} --region ${{ vars.AWS_REGION }} > task-def.json
           
           jq --arg IMAGE "${{ env.ECR_REPOSITORY_URI }}:${{ github.sha }}" '.taskDefinition | .containerDefinitions[0].image = $IMAGE | del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-def.json > new-task-def.json
           
-          aws ecs register-task-definition --cli-input-json file://new-task-def.json --region ap-northeast-2 > registered-task-def.json
+          aws ecs register-task-definition --cli-input-json file://new-task-def.json --region ${{ vars.AWS_REGION }} > registered-task-def.json
           REVISION=$(jq -r '.taskDefinition.revision' registered-task-def.json)
           echo "NEW_REVISION=$REVISION" >> $GITHUB_ENV
 
       - name: Deploy to Amazon ECS
         run: |
-          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-definition ${{ env.ECS_TASK_DEFINITION }}:${{ env.NEW_REVISION }} --desired-count 1 --region ap-northeast-2
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-definition ${{ env.ECS_TASK_DEFINITION }}:${{ env.NEW_REVISION }} --desired-count 1 --region ${{ vars.AWS_REGION }}
